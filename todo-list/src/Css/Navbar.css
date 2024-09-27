@@ -1,0 +1,32 @@
+.search-container {
+  position: relative;
+  width: 100%; /* Adjust width as needed */
+}
+
+input {
+  width: 100%; /* Full width */
+  padding: 10px 40px 10px 10px; /* Add padding for icon */
+  border: 1px solid #ccc; /* Border styling */
+  border-radius: 5px; /* Rounded corners */
+}
+
+.search-icon {
+  position: absolute;
+  right: 10px; /* Adjust based on your design */
+  top: 50%;
+  transform: translateY(-50%); /* Center the icon vertically */
+  color: #888; /* Icon color */
+  font-size: 1.5rem;
+}
+.task-logo {
+  background-color: rgb(153, 41, 41);
+  font-size: 2.2rem;
+  border-radius: 0.2rem;
+  padding: 5px;
+  color: white;
+}
+/* .custom-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+} */
