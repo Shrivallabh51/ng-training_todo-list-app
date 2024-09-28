@@ -2,11 +2,13 @@ import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
 
-function deleteTask(props) {
-  const { deleteTask, TaskId } = props;
+function DeleteTask({ deleteTask, TaskId, isOpen }) {
+  if (!isOpen) return null; // Render nothing if modal is not open
+
   return (
     <div
-      className="modal fade"
+      className="modal fade show" // Use 'show' to display the modal
+      style={{ display: "block" }} // Ensure the modal is displayed
       id="DeleteModal"
       tabIndex="-1"
       aria-labelledby="exampleModalLabel"
@@ -18,12 +20,10 @@ function deleteTask(props) {
       >
         <div className="modal-content" style={{ height: "50vh" }}>
           <div className="modal-header bg-danger text-white">
-            {" "}
-            {/* Red background */}
             <h3 className="modal-title text-center w-100">Delete Task</h3>
             <button
               type="button"
-              className="btn-close btn-close-white" // White close button for better visibility
+              className="btn-close btn-close-white"
               data-bs-dismiss="modal"
               aria-label="Close"
             ></button>
@@ -37,7 +37,11 @@ function deleteTask(props) {
               type="button"
               className="btn btn-success"
               data-bs-dismiss="modal"
-              aria-label="Close"
+              aria-label="No"
+              name="No"
+              onClick={() => {
+                /* Optionally handle No action */
+              }}
             >
               No
             </button>
@@ -45,7 +49,7 @@ function deleteTask(props) {
               type="button"
               className="btn btn-warning"
               data-bs-dismiss="modal"
-              aria-label="Close"
+              aria-label="Yes"
               onClick={() => deleteTask(TaskId)}
             >
               Yes
@@ -57,4 +61,4 @@ function deleteTask(props) {
   );
 }
 
-export default deleteTask;
+export default DeleteTask;

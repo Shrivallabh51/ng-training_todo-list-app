@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
+import { v4 as uuidv4 } from "uuid"; // Import UUID for unique IDs
 
 function TaskForm(props) {
   const { tasks, setTasks, isEditing, setIsEditing, EditId } = props;
@@ -22,19 +23,22 @@ function TaskForm(props) {
       if (taskToEdit) {
         setNewTask(taskToEdit); // Set the task to edit
       }
-
-      //setTasks
     } else {
       // Reset form if not editing
-      setNewTask({
-        assignedTo: "",
-        status: "",
-        dueDate: "",
-        priority: "",
-        comment: "",
-      });
+      resetForm();
     }
   }, [isEditing, EditId, tasks]);
+  // Reset the form
+  const resetForm = () => {
+    setNewTask({
+      id: "",
+      assignedTo: "",
+      status: "",
+      dueDate: "",
+      priority: "",
+      comment: "",
+    });
+  };
 
   // Handle input change and update the state
   const handleInputChange = (e) => {
@@ -50,32 +54,21 @@ function TaskForm(props) {
     e.preventDefault();
 
     if (isEditing) {
-      // Make a copy of the task list to ensure immutability
       const updatedTasks = tasks.map((task) =>
         task.id === EditId ? { ...newTask } : task
       );
-
       setTasks(updatedTasks);
       setIsEditing(false);
     } else {
-      // Add a new task
       const task = {
-        id: Date.now(), // Generate unique ID
+        id: uuidv4(), // Use UUID for unique ID
         ...newTask,
       };
-      // Add a new task by creating a new array with the added task
       setTasks([...tasks, task]);
     }
 
     // Reset the form fields after adding/editing a task
-    setNewTask({
-      id: "",
-      assignedTo: "",
-      status: "",
-      dueDate: "",
-      priority: "",
-      comment: "",
-    });
+    resetForm();
   };
 
   const isSubmitDisabled =
@@ -86,7 +79,7 @@ function TaskForm(props) {
       className="modal fade"
       id="newTaskModal"
       tabIndex="-1"
-      aria-labelledby="exampleModalLabel"
+      aria-labelledby="newTaskModalLabel"
       aria-hidden="true"
     >
       <div
@@ -95,17 +88,23 @@ function TaskForm(props) {
       >
         <div className="modal-content" style={{ height: "100%" }}>
           <div className="modal-header" style={{ height: "15%" }}>
-            <h3 className="modal-title text-center w-100">New Task</h3>
+            <h3
+              className="modal-title text-center w-100"
+              id="newTaskModalLabel"
+            >
+              Add New Task
+            </h3>
           </div>
           <hr />
           <div className="modal-body" style={{ overflowY: "auto" }}>
-            <form>
+            <form onSubmit={addTask}>
               <div className="row">
                 <div className="col-md-6 mb-3">
-                  <label className="mb-2">
+                  <label htmlFor="assignedTo" className="mb-2">
                     <span className="text-danger">*</span> Assigned To
                   </label>
                   <select
+                    id="assignedTo"
                     className="form-control"
                     name="assignedTo"
                     value={newTask.assignedTo}
@@ -118,10 +117,11 @@ function TaskForm(props) {
                   </select>
                 </div>
                 <div className="col-md-6 mb-3">
-                  <label className="mb-2">
+                  <label htmlFor="status" className="mb-2">
                     <span className="text-danger">*</span>Status
                   </label>
                   <select
+                    id="status"
                     className="form-control"
                     name="status"
                     value={newTask.status}
@@ -133,9 +133,12 @@ function TaskForm(props) {
                   </select>
                 </div>
                 <div className="col-md-6 mb-3">
-                  <label className="mb-2">Due Date</label>
+                  <label htmlFor="dueDate" className="mb-2">
+                    Due Date
+                  </label>
                   <input
                     type="date"
+                    id="dueDate"
                     className="form-control"
                     name="dueDate"
                     value={newTask.dueDate}
@@ -143,10 +146,11 @@ function TaskForm(props) {
                   />
                 </div>
                 <div className="col-md-6 mb-3">
-                  <label className="mb-2">
+                  <label htmlFor="priority" className="mb-2">
                     <span className="text-danger">*</span> Priority
                   </label>
                   <select
+                    id="priority"
                     className="form-control"
                     name="priority"
                     value={newTask.priority}
@@ -158,8 +162,11 @@ function TaskForm(props) {
                   </select>
                 </div>
                 <div className="col-12 mb-3">
-                  <label className="mb-2">Description</label>
+                  <label htmlFor="comment" className="mb-2">
+                    Description
+                  </label>
                   <textarea
+                    id="comment"
                     className="form-control"
                     rows="3"
                     name="comment"
@@ -168,25 +175,25 @@ function TaskForm(props) {
                   ></textarea>
                 </div>
               </div>
+              <div className="modal-footer">
+                <button
+                  type="button"
+                  className="btn btn-warning"
+                  data-bs-dismiss="modal"
+                  onClick={resetForm} // Reset on modal close
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="btn btn-success"
+                  disabled={isSubmitDisabled}
+                  data-bs-dismiss="modal"
+                >
+                  {isEditing ? "Edit" : "Save"}
+                </button>
+              </div>
             </form>
-          </div>
-          <div className="modal-footer">
-            <button
-              type="button"
-              className="btn btn-warning"
-              data-bs-dismiss="modal"
-            >
-              Cancel
-            </button>
-            <button
-              type="button"
-              className="btn btn-success"
-              onClick={addTask}
-              disabled={isSubmitDisabled}
-              data-bs-dismiss="modal"
-            >
-              {isEditing ? "Edit" : "Save"}
-            </button>
           </div>
         </div>
       </div>

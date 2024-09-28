@@ -1,3 +1,4 @@
+import React, { useState } from "react"; // Import useState
 import {
   FaAngleDoubleLeft,
   FaAngleLeft,
@@ -5,7 +6,14 @@ import {
   FaAngleDoubleRight,
 } from "react-icons/fa";
 
-const pagination = () => {
+const Pagination = () => {
+  const [itemsPerPage, setItemsPerPage] = useState(5); // State for items per page
+
+  const handleItemsPerPageChange = (event) => {
+    const value = Math.max(1, Number(event.target.value)); // Ensure a positive number
+    setItemsPerPage(value); // Update the state
+  };
+
   return (
     <div className="container mt-4 border-top border-secondary">
       <div
@@ -17,8 +25,10 @@ const pagination = () => {
           <input
             type="number"
             className="form-control"
-            value="5"
+            value={itemsPerPage} // Controlled input
+            onChange={handleItemsPerPageChange} // Handle change
             style={{ width: "60px", marginRight: "10px" }}
+            min="1" // Ensure at least 1 item per page
           />
         </div>
 
@@ -44,4 +54,5 @@ const pagination = () => {
     </div>
   );
 };
-export default pagination;
+
+export default Pagination;

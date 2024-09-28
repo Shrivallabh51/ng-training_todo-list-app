@@ -1,9 +1,17 @@
+import React, { useState } from "react"; // Import useState
 import { FaSearch } from "react-icons/fa";
 import { FaTasks } from "react-icons/fa";
 
 import "../Css/Navbar.css";
+
 const NavBar = (props) => {
   const { tasks } = props;
+  const [searchQuery, setSearchQuery] = useState(""); // State for search input
+
+  const handleSearchChange = (event) => {
+    setSearchQuery(event.target.value); // Update the state on input change
+  };
+
   return (
     <div className="border-bottom border-secondary">
       {/* Navigation Bar */}
@@ -11,7 +19,7 @@ const NavBar = (props) => {
         <div className="container-fluid">
           {/* Logo and Title */}
           <div>
-            <div className="d-flex align-items-center  h-80">
+            <div className="d-flex align-items-center h-80">
               <FaTasks className="task-logo" />
               <div className="d-flex flex-column p-2">
                 <span className="navbar-brand mb-0 h1 ms-2">Tasks</span>
@@ -43,6 +51,8 @@ const NavBar = (props) => {
                 type="text"
                 className="form-control"
                 placeholder="Search"
+                value={searchQuery} // Controlled input
+                onChange={handleSearchChange} // Handle change
               />
               <FaSearch className="search-icon " />
             </div>
@@ -52,4 +62,5 @@ const NavBar = (props) => {
     </div>
   );
 };
+
 export default NavBar;
